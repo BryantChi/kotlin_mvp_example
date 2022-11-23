@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.20606884057971014" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="../../.gradle/caches/transforms-3/45828fa8aa0b9348bcbaf27287a12366/transformed/material-1.4.0/res/drawable/ic_mtrl_chip_close_circle.xml" value="0.1315" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2585311889648438" />
+        <entry key="app/src/main/res/layout/activity_user_detail.xml" value="0.23802083333333332" />
         <entry key="app/src/main/res/layout/item_user.xml" value="0.21920289855072464" />
       </map>
     </option>

@@ -1,8 +1,8 @@
 package com.taichung.bryant.kotlin_mvp.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +10,7 @@ import com.taichung.bryant.kotlin_mvp.R
 import com.taichung.bryant.kotlin_mvp.adapter.UserAdapter
 import com.taichung.bryant.kotlin_mvp.listeners.ItemClickListener
 import com.taichung.bryant.kotlin_mvp.models.UserModel
+import com.taichung.bryant.kotlin_mvp.ui.details.UserDetailActivity
 import com.taichung.bryant.kotlin_mvp.utils.showToast
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity(), UserView {
     private var mainUsersList: MutableList<UserModel> = mutableListOf()
     private var lastUsersList: MutableList<UserModel> = mutableListOf()
     private var lastVisibleItem: Int = 0
+    val USER_NAME_KEY = "username"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +72,10 @@ class MainActivity : AppCompatActivity(), UserView {
         userAdapter = UserAdapter(
             applicationContext,
             object : ItemClickListener {
-                override fun itemClick(position: Int) {
-                    TODO("Not yet implemented")
+                override fun itemClick(userName: String) {
+                    val intent = Intent(applicationContext, UserDetailActivity::class.java)
+                    intent.putExtra(USER_NAME_KEY, userName)
+                    startActivity(intent)
                 }
             }
         )

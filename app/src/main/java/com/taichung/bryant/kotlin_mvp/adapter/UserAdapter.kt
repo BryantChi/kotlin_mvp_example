@@ -53,8 +53,8 @@ class UserAdapter(var context: Context, var itemClick: ItemClickListener) :
         val tv_user = itemView.findViewById<TextView>(R.id.tv_user)
 
         init {
-            tv_user.setOnClickListener {
-                itemClick.itemClick(adapterPosition)
+            itemView.setOnClickListener {
+                itemClick.itemClick(userList[adapterPosition].login)
             }
         }
     }

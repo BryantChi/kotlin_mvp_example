@@ -1,11 +1,9 @@
 package com.taichung.bryant.kotlin_mvp.data
 
+import com.taichung.bryant.kotlin_mvp.models.UserDeailModel
 import com.taichung.bryant.kotlin_mvp.models.UserModel
 import io.reactivex.Observable
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface Api {
     @GET("users")
@@ -13,4 +11,9 @@ interface Api {
         @Query("since") since: Int? = null,
         @Query("per_page") perPage: Int? = null
     ): Observable<List<UserModel>>
+
+    @GET("users/{username}")
+    fun getUser(
+        @Path("username") username: String
+    ): Observable<UserDeailModel>
 }
