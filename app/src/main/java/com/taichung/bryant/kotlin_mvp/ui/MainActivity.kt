@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.taichung.bryant.kotlin_mvp.R
 import com.taichung.bryant.kotlin_mvp.adapter.UserAdapter
 import com.taichung.bryant.kotlin_mvp.listeners.ItemClickListener
@@ -15,6 +16,10 @@ class MainActivity : AppCompatActivity(), UserView {
 
     private lateinit var mainPresenter: MainPresenter
     private lateinit var userAdapter: UserAdapter
+    private lateinit var mLayoutManager: LinearLayoutManager
+    private var mainUsersList: MutableList<UserModel> = mutableListOf()
+    private var lastUsersList: MutableList<UserModel> = mutableListOf()
+    private var lastVisibleItem: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,11 +27,8 @@ class MainActivity : AppCompatActivity(), UserView {
 
         mainPresenter = MainPresenter(this, MainInteractor())
         progressBar.visibility = View.GONE
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mainPresenter.getUserList()
+        initView()
+        mainPresenter.getUserList(0, 20)
     }
 
     override fun showProgress() {
@@ -38,19 +40,19 @@ class MainActivity : AppCompatActivity(), UserView {
     }
 
     override fun setUsersData(usersList: List<UserModel>) {
-        userAdapter = UserAdapter(
-            applicationContext,
-            object : ItemClickListener {
-                override fun itemClick(position: Int) {
-                    TODO("Not yet implemented")
-                }
-            }
-        )
+        mainUsersList.addAll(usersList)
         userAdapter.submitList(usersList)
-        rv_users.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
-            adapter = userAdapter
-        }
+
+        lastUsersList.clear()
+        lastUsersList.addAll(usersList)
+    }
+
+    override fun updateUsersData(usersList: List<UserModel>) {
+        mainUsersList.addAll(usersList)
+        userAdapter.updateList(usersList)
+
+        lastUsersList.clear()
+        lastUsersList.addAll(usersList)
     }
 
     override fun getDataFailed(strError: String) {
@@ -60,5 +62,41 @@ class MainActivity : AppCompatActivity(), UserView {
     override fun onDestroy() {
         mainPresenter.onDestroy()
         super.onDestroy()
+    }
+
+    private fun initView() {
+        userAdapter = UserAdapter(
+            applicationContext,
+            object : ItemClickListener {
+                override fun itemClick(position: Int) {
+                    TODO("Not yet implemented")
+                }
+            }
+        )
+
+        mLayoutManager = LinearLayoutManager(applicationContext)
+        rv_users.apply {
+            layoutManager = mLayoutManager
+            adapter = userAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == userAdapter.itemCount) {
+                        if (lastUsersList.size == 20 && mainUsersList.size <= 100) {
+                            val lastSince: Int = mainUsersList.last().id
+                            mainPresenter.getUserList(lastSince, 20)
+                        } else {
+                            Toast.makeText(applicationContext, R.string.no_more_info, Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    lastVisibleItem = mLayoutManager.findLastVisibleItemPosition()
+                }
+            })
+        }
     }
 }

@@ -6,5 +6,6 @@ interface UserView {
     fun showProgress()
     fun hideProgress()
     fun setUsersData(usersList: List<UserModel>)
+    fun updateUsersData(usersList: List<UserModel>)
     fun getDataFailed(strError: String)
 }

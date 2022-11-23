@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">kotlin_mvp</string>
+    <string name="app_name">Github Users</string>
+    <string name="no_more_info">No More Users</string>
 </resources>
