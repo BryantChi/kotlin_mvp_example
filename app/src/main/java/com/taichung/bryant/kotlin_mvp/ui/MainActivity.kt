@@ -10,6 +10,7 @@ import com.taichung.bryant.kotlin_mvp.R
 import com.taichung.bryant.kotlin_mvp.adapter.UserAdapter
 import com.taichung.bryant.kotlin_mvp.listeners.ItemClickListener
 import com.taichung.bryant.kotlin_mvp.models.UserModel
+import com.taichung.bryant.kotlin_mvp.utils.showToast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), UserView {
@@ -53,10 +54,11 @@ class MainActivity : AppCompatActivity(), UserView {
 
         lastUsersList.clear()
         lastUsersList.addAll(usersList)
+        rv_users.smoothScrollToPosition(userAdapter.itemCount - 20)
     }
 
     override fun getDataFailed(strError: String) {
-        Toast.makeText(applicationContext, strError, Toast.LENGTH_SHORT).show()
+        showToast(applicationContext, strError)
     }
 
     override fun onDestroy() {
@@ -86,9 +88,8 @@ class MainActivity : AppCompatActivity(), UserView {
                             val lastSince: Int = mainUsersList.last().id
                             mainPresenter.getUserList(lastSince, 20)
                         } else {
-                            Toast.makeText(applicationContext, R.string.no_more_info, Toast.LENGTH_SHORT).show()
+                            showToast(applicationContext, getString(R.string.no_more_info))
                         }
-
                     }
                 }
 

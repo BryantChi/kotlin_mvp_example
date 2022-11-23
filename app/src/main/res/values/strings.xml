@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Github Users</string>
     <string name="no_more_info">No More Users</string>
+    <string name="list_title">Users</string>
 </resources>

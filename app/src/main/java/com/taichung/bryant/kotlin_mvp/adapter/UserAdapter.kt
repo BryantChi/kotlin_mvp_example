@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.taichung.bryant.kotlin_mvp.R
 import com.taichung.bryant.kotlin_mvp.listeners.ItemClickListener
 import com.taichung.bryant.kotlin_mvp.models.UserModel
@@ -34,7 +36,11 @@ class UserAdapter(var context: Context, var itemClick: ItemClickListener) :
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.im_user.setImageURI(Uri.EMPTY)
+        holder.im_user.load(userList[position].avatar_url) {
+            crossfade(true)
+            placeholder(R.drawable.man)
+            transformations(CircleCropTransformation())
+        }
         holder.tv_user.text = userList[position].login
     }
 
