@@ -39,7 +39,7 @@ class UserDetailPresenter(
                 onSuccess(it)
             }, {
                 onFail("Error")
-                throw it
+//                throw it
             })
     }
 }

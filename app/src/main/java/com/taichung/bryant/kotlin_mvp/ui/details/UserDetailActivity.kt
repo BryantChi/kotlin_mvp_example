@@ -18,7 +18,7 @@ class UserDetailActivity : AppCompatActivity(), UserDetailView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_detail)
-        userName = intent.getStringExtra(MainActivity().USER_NAME_KEY).toString()
+        userName = intent.getStringExtra(MainActivity.USER_NAME_KEY).toString()
 
         userDetailPresenter = UserDetailPresenter(this)
         progressBar.visibility = View.GONE

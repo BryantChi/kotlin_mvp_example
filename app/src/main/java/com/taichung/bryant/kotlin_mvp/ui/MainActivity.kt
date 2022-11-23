@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity(), UserView {
     private var mainUsersList: MutableList<UserModel> = mutableListOf()
     private var lastUsersList: MutableList<UserModel> = mutableListOf()
     private var lastVisibleItem: Int = 0
-    val USER_NAME_KEY = "username"
+
+    companion object {
+        const val USER_NAME_KEY = "username"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +77,7 @@ class MainActivity : AppCompatActivity(), UserView {
             object : ItemClickListener {
                 override fun itemClick(userName: String) {
                     val intent = Intent(applicationContext, UserDetailActivity::class.java)
-                    intent.putExtra(USER_NAME_KEY, userName)
+                    intent.putExtra(Companion.USER_NAME_KEY, userName)
                     startActivity(intent)
                 }
             }
@@ -87,9 +90,13 @@ class MainActivity : AppCompatActivity(), UserView {
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == userAdapter.itemCount) {
-                        if (lastUsersList.size == 20 && mainUsersList.size <= 100) {
-                            val lastSince: Int = mainUsersList.last().id
+                    val isScrollToBottom =
+                        newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == userAdapter.itemCount
+                    val isLoadMore = lastUsersList.size == 20 && mainUsersList.size <= 100
+                    val lastSince: Int = mainUsersList.last().id
+
+                    if (isScrollToBottom) {
+                        if (isLoadMore) {
                             mainPresenter.getUserList(lastSince, 20)
                         } else {
                             showToast(applicationContext, getString(R.string.no_more_info))

@@ -1,6 +1,5 @@
 package com.taichung.bryant.kotlin_mvp.ui
 
-import android.util.Log
 import com.taichung.bryant.kotlin_mvp.data.Api
 import com.taichung.bryant.kotlin_mvp.data.RetrofitManager
 import com.taichung.bryant.kotlin_mvp.models.UserModel
@@ -41,10 +40,6 @@ class MainPresenter(private var userView: UserView?, private val mainInteractor:
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d("it size", it.size.toString())
-                it.forEachIndexed { index, userModel ->
-                    Log.d("it id", userModel.id.toString() + "|" + index)
-                }
                 if (since == 0) {
                     onSuccess(it)
                 } else {
@@ -52,9 +47,7 @@ class MainPresenter(private var userView: UserView?, private val mainInteractor:
                 }
             }, {
                 onFail("Error")
-                throw it
+//                throw it
             })
     }
-
-
 }
