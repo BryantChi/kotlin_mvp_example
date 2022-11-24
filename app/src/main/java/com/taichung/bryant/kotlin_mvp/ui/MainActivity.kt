@@ -25,6 +25,8 @@ class MainActivity : AppCompatActivity(), UserView {
 
     companion object {
         const val USER_NAME_KEY = "username"
+        const val LIMIT_PRE_PAGE = 20
+        const val LIMIT_USERS = 100
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +36,7 @@ class MainActivity : AppCompatActivity(), UserView {
         mainPresenter = MainPresenter(this, MainInteractor())
         progressBar.visibility = View.GONE
         initView()
-        mainPresenter.getUserList(0, 20)
+        mainPresenter.getUserList(0, LIMIT_PRE_PAGE)
     }
 
     override fun showProgress() {
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity(), UserView {
 
         lastUsersList.clear()
         lastUsersList.addAll(usersList)
-        rv_users.smoothScrollToPosition(userAdapter.itemCount - 20)
+        rv_users.smoothScrollToPosition(userAdapter.itemCount - 15)
     }
 
     override fun getDataFailed(strError: String) {
@@ -92,12 +94,13 @@ class MainActivity : AppCompatActivity(), UserView {
                     super.onScrollStateChanged(recyclerView, newState)
                     val isScrollToBottom =
                         newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == userAdapter.itemCount
-                    val isLoadMore = lastUsersList.size == 20 && mainUsersList.size <= 100
+                    val isLoadMore =
+                        lastUsersList.size == LIMIT_PRE_PAGE && mainUsersList.size <= LIMIT_USERS
                     val lastSince: Int = mainUsersList.last().id
 
                     if (isScrollToBottom) {
                         if (isLoadMore) {
-                            mainPresenter.getUserList(lastSince, 20)
+                            mainPresenter.getUserList(lastSince, LIMIT_PRE_PAGE)
                         } else {
                             showToast(applicationContext, getString(R.string.no_more_info))
                         }
